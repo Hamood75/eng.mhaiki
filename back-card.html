@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eng. Decklan P. Mhaiki - Business Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --navy: #0c2340;
+      --navy-soft: #163a5f;
+      --accent: #e8a317;
+      --energy: #f59e0b;
+      --bg: #f7f5f0;
+      --surface: #ffffff;
+      --text: #1a2332;
+      --text-muted: #5f6d7e;
+      --border: #ebe6dc;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 8px 32px rgba(12, 35, 64, 0.12);
+      --transition: 0.2s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+      animation: softFade 0.5s ease-out both;
+    }
+
+    .page-header h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .page-header p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .card-container {
+      perspective: 1200px;
+      position: relative;
+      z-index: 1;
+      animation: softFade 0.55s ease-out 0.15s both;
+    }
+
+    .business-card {
+      width: 400px;
+      height: 240px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-side {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-front {
+      background: linear-gradient(145deg, #0c2340 0%, #1a2f1a 50%, #2a1f0a 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      transform: rotateY(0deg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-front::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.25);
+      filter: blur(30px);
+      pointer-events: none;
+    }
+
+    .card-front > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-back {
+      background: var(--surface);
+      color: var(--text);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+    }
+
+    .front-top {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .front-top .name {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .front-top .position {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.9;
+      line-height: 1.35;
+      letter-spacing: 0.02em;
+    }
+
+    .front-top .unit {
+      font-size: 10px;
+      opacity: 0.75;
+      margin-top: 3px;
+      color: rgba(251, 191, 36, 0.95);
+    }
+
+    .front-top .department {
+      font-size: 11px;
+      opacity: 0.65;
+      margin-top: 4px;
+    }
+
+    .front-body {
+      flex: 1;
+      padding: 14px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .front-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11.5px;
+      opacity: 0.9;
+    }
+
+    .front-row i {
+      width: 16px;
+      text-align: center;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .front-accent {
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        #1eb53a,
+        #fcd116,
+        #000000,
+        #00a3dd,
+        transparent
+      );
+    }
+
+    .back-header {
+      background: linear-gradient(90deg, var(--navy), #1a2f1a);
+      color: white;
+      padding: 14px 24px;
+    }
+
+    .back-header h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .back-body {
+      flex: 1;
+      padding: 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .back-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .back-row i {
+      width: 14px;
+      color: var(--energy);
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .back-row .label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-width: 52px;
+      flex-shrink: 0;
+    }
+
+    .back-row .value {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .back-footer {
+      padding: 10px 24px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      font-size: 8px;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 28px;
+      position: relative;
+      z-index: 1;
+      animation: softFade 0.5s ease-out 0.35s both;
+    }
+
+    .control-btn {
+      padding: 11px 18px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
+    }
+
+    .control-btn:hover {
+      background: var(--bg);
+      border-color: var(--energy);
+      color: var(--navy);
+    }
+
+    .control-btn-primary {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    .control-btn-primary:hover {
+      background: var(--navy-soft);
+      border-color: var(--navy-soft);
+      color: white;
+    }
+
+    .control-btn-accent {
+      background: var(--energy);
+      border-color: var(--energy);
+      color: white;
+    }
+
+    .control-btn-accent:hover {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .business-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    @keyframes softFade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a7f4b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+      .business-card,
+      .card-side {
+        width: 340px;
+        height: 204px;
+      }
+
+      .front-top .name {
+        font-size: 18px;
+      }
+
+      .controls {
+        width: 100%;
+      }
+
+      .control-btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>Business Card</h1>
+    <p>Eng. Decklan P. Mhaiki</p>
+  </div>
+
+  <div class="card-container">
+    <div id="business-card" class="business-card">
+      <div class="card-side card-front">
+        <div class="front-top">
+          <h1 class="name">Eng. Decklan P. Mhaiki</h1>
+          <p class="position">Project Coordinator</p>
+          <p class="unit">Compact Delivery &amp; Monitoring Unit (CDMU)</p>
+          <p class="department">Ministry of Energy</p>
+        </div>
+        <div class="front-body">
+          <div class="front-row">
+            <i class="fas fa-envelope"></i>
+            <span>d.mhaiki@gmail.com</span>
+          </div>
+          <div class="front-row">
+            <i class="fas fa-phone"></i>
+            <span>+255 784 493 344 / +255 736 493 344</span>
+          </div>
+          <div class="front-row">
+            <i class="fas fa-globe"></i>
+            <span>www.nishati.go.tz</span>
+          </div>
+          <div class="front-row">
+            <i class="fas fa-location-dot"></i>
+            <span>Dodoma, Tanzania</span>
+          </div>
+        </div>
+        <div class="front-accent"></div>
+      </div>
+
+      <div class="card-side card-back">
+        <div class="back-header">
+          <h2>Contact Information</h2>
+        </div>
+        <div class="back-body">
+          <div class="back-row">
+            <i class="fas fa-envelope"></i>
+            <span class="label">Email</span>
+            <span class="value">d.mhaiki@gmail.com</span>
+          </div>
+          <div class="back-row">
+            <i class="fas fa-phone"></i>
+            <span class="label">Mobile</span>
+            <span class="value">+255 784 493 344</span>
+          </div>
+          <div class="back-row">
+            <i class="fas fa-mobile-screen"></i>
+            <span class="label">Mobile</span>
+            <span class="value">+255 736 493 344</span>
+          </div>
+          <div class="back-row">
+            <i class="fas fa-globe"></i>
+            <span class="label">Web</span>
+            <span class="value">www.nishati.go.tz</span>
+          </div>
+          <div class="back-row">
+            <i class="fas fa-location-dot"></i>
+            <span class="label">Address</span>
+            <span class="value">Government City, Mtumba</span>
+          </div>
+          <div class="back-row">
+            <i class="fas fa-inbox"></i>
+            <span class="label">P.O. Box</span>
+            <span class="value">2494, Dodoma, Tanzania</span>
+          </div>
+        </div>
+        <div class="back-footer">
+          United Republic of Tanzania &middot; Ministry of Energy
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button type="button" class="control-btn control-btn-accent" id="flip-btn">
+      <i class="fas fa-rotate"></i>
+      Flip
+    </button>
+    <button type="button" class="control-btn control-btn-primary" id="download-btn">
+      <i class="fas fa-download"></i>
+      Download
+    </button>
+    <button type="button" class="control-btn" id="contact-btn">
+      <i class="fas fa-address-book"></i>
+      Save Contact
+    </button>
+  </div>
+
+  <div id="status-message" class="toast"></div>
+
+  <script>
+    function flipCard() {
+      document.getElementById('business-card').classList.toggle('flipped');
+    }
+
+    function showStatus(message) {
+      const statusEl = document.getElementById('status-message');
+      statusEl.textContent = message;
+      statusEl.classList.add('show');
+      setTimeout(() => statusEl.classList.remove('show'), 3000);
+    }
+
+    function downloadCard() {
+      const card = document.getElementById('business-card');
+      const isFlipped = card.classList.contains('flipped');
+      const frontCard = document.querySelector('.card-front');
+      const backCard = document.querySelector('.card-back');
+
+      card.style.transform = 'none';
+      frontCard.style.transform = 'rotateY(0deg)';
+      backCard.style.transform = 'rotateY(0deg)';
+      frontCard.style.display = 'flex';
+      backCard.style.display = 'none';
+
+      setTimeout(() => {
+        html2canvas(frontCard, {
+          useCORS: true,
+          allowTaint: true,
+          scale: 3,
+          backgroundColor: null,
+          logging: false,
+          width: 400,
+          height: 240
+        }).then(frontCanvas => {
+          frontCard.style.display = 'none';
+          backCard.style.display = 'flex';
+
+          setTimeout(() => {
+            html2canvas(backCard, {
+              useCORS: true,
+              allowTaint: true,
+              scale: 3,
+              backgroundColor: null,
+              logging: false,
+              width: 400,
+              height: 240
+            }).then(backCanvas => {
+              const combinedCanvas = document.createElement('canvas');
+              const ctx = combinedCanvas.getContext('2d');
+              const cardWidth = 400 * 3;
+              const cardHeight = 240 * 3;
+              const gap = 80;
+
+              combinedCanvas.width = (cardWidth * 2) + gap;
+              combinedCanvas.height = cardHeight + 80;
+
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+
+              ctx.fillStyle = '#0c2340';
+              ctx.font = 'bold 40px DM Sans, Arial, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.fillText('Eng. Decklan P. Mhaiki - Business Card', combinedCanvas.width / 2, 50);
+
+              ctx.drawImage(frontCanvas, 0, 80);
+              ctx.drawImage(backCanvas, cardWidth + gap, 80);
+
+              ctx.strokeStyle = '#ebe6dc';
+              ctx.lineWidth = 2;
+              ctx.strokeRect(0, 80, cardWidth, cardHeight);
+              ctx.strokeRect(cardWidth + gap, 80, cardWidth, cardHeight);
+
+              const link = document.createElement('a');
+              link.href = combinedCanvas.toDataURL('image/png', 1.0);
+              link.download = 'Decklan_Mhaiki_Business_Card.png';
+              link.click();
+
+              showStatus('Business card downloaded');
+
+              card.style.transform = '';
+              frontCard.style.transform = '';
+              backCard.style.transform = '';
+              frontCard.style.display = '';
+              backCard.style.display = '';
+              card.classList.toggle('flipped', isFlipped);
+            }).catch(() => {
+              showStatus('Download failed. Please try again.');
+              restoreCard(card, frontCard, backCard, isFlipped);
+            });
+          }, 600);
+        }).catch(() => {
+          showStatus('Download failed. Please try again.');
+          restoreCard(card, frontCard, backCard, isFlipped);
+        });
+      }, 100);
+    }
+
+    function restoreCard(card, frontCard, backCard, isFlipped) {
+      card.style.transform = '';
+      frontCard.style.transform = '';
+      backCard.style.transform = '';
+      frontCard.style.display = '';
+      backCard.style.display = '';
+      card.classList.toggle('flipped', isFlipped);
+    }
+
+    const contactInfo = {
+      firstName: 'Decklan P.',
+      lastName: 'Mhaiki',
+      prefix: 'Eng.',
+      title: 'Project Coordinator, Compact Delivery & Monitoring Unit (CDMU)',
+      organization: 'Ministry of Energy',
+      email: 'd.mhaiki@gmail.com',
+      phone: '+255784493344',
+      phone2: '+255736493344',
+      website: 'https://www.nishati.go.tz',
+      address: {
+        street: 'Government City, Mtumba',
+        poBox: 'P.O. Box 2494',
+        city: 'Dodoma',
+        country: 'Tanzania'
+      }
+    };
+
+    function generateVCard(contact) {
+      return [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        `FN:${contact.prefix} ${contact.firstName} ${contact.lastName}`,
+        `N:${contact.lastName};${contact.firstName};;${contact.prefix};`,
+        `TITLE:${contact.title}`,
+        `ORG:${contact.organization}`,
+        `EMAIL;TYPE=INTERNET:${contact.email}`,
+        `TEL;TYPE=CELL:${contact.phone}`,
+        `TEL;TYPE=CELL:${contact.phone2}`,
+        `URL:${contact.website}`,
+        `ADR;TYPE=WORK:;;${contact.address.street};${contact.address.city};;;${contact.address.country}`,
+        `X-ADDRESS-LINE1:${contact.address.street}`,
+        `X-ADDRESS-LINE2:${contact.address.poBox}`,
+        `NOTE:${contact.title} at ${contact.organization}, United Republic of Tanzania`,
+        'END:VCARD'
+      ].join('\n');
+    }
+
+    function downloadVCard() {
+      const blob = new Blob([generateVCard(contactInfo)], { type: 'text/vcard;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Decklan_Mhaiki_Contact.vcf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      showStatus('Contact saved successfully');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('flip-btn').addEventListener('click', flipCard);
+      document.getElementById('download-btn').addEventListener('click', downloadCard);
+      document.getElementById('contact-btn').addEventListener('click', downloadVCard);
+    });
+  </script>
+</body>
+</html>

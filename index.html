@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eng. Decklan P. Mhaiki - Digital Business Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0c2340;
+      --navy-soft: #163a5f;
+      --accent: #e8a317;
+      --energy: #f59e0b;
+      --energy-soft: #fbbf24;
+      --power: #ea580c;
+      --bg: #f7f5f0;
+      --surface: #ffffff;
+      --text: #1a2332;
+      --text-muted: #5f6d7e;
+      --border: #ebe6dc;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 4px 24px rgba(12, 35, 64, 0.08);
+      --shadow-lg: 0 12px 40px rgba(12, 35, 64, 0.12);
+      --transition: 0.2s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .password-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(145deg, #0c2340 0%, #1a2f1a 40%, #2a1f0a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .password-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(234, 88, 12, 0.12) 0%, transparent 40%);
+      animation: ambientGlow 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .password-modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      animation: fadeUp 0.4s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    .password-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: var(--energy);
+      font-size: 22px;
+    }
+
+    .password-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .password-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 1.25rem;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      font-family: 'DM Sans', monospace;
+      background: var(--bg);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      margin-bottom: 16px;
+    }
+
+    .password-input:focus {
+      outline: none;
+      border-color: var(--energy);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      background: var(--surface);
+    }
+
+    .password-submit {
+      width: 100%;
+      padding: 15px 24px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .password-submit:hover {
+      background: var(--navy-soft);
+    }
+
+    .password-submit:active {
+      transform: scale(0.98);
+    }
+
+    .password-error {
+      color: #c53030;
+      font-size: 0.875rem;
+      margin-top: 16px;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .password-error.show {
+      opacity: 1;
+    }
+
+    .main-content {
+      display: none;
+    }
+
+    .main-content.show {
+      display: block;
+      animation: fadeUp 0.5s ease-out;
+    }
+
+    .page {
+      min-height: 100dvh;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #0c2340 0%, #1a2f1a 50%, #2a1f0a 100%);
+      color: white;
+      text-align: center;
+      padding: 48px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      animation: ambientGlow 9s ease-in-out infinite;
+    }
+
+    .hero-glow-1 {
+      width: 300px;
+      height: 300px;
+      background: rgba(245, 158, 11, 0.4);
+      top: -100px;
+      right: -80px;
+    }
+
+    .hero-glow-2 {
+      width: 220px;
+      height: 220px;
+      background: rgba(234, 88, 12, 0.25);
+      bottom: -60px;
+      left: -50px;
+      animation-delay: -4.5s;
+    }
+
+    .hero-line {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: 32%;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        #1eb53a 0%,
+        #fcd116 22%,
+        #000000 45%,
+        #000000 55%,
+        #00a3dd 78%,
+        transparent 100%
+      );
+      opacity: 0.85;
+      border-radius: 2px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content > * {
+      animation: softReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .hero-badge { animation-delay: 0.05s; }
+    .hero-content h1 { animation-delay: 0.15s; }
+    .hero-title { animation-delay: 0.25s; }
+    .hero-unit { animation-delay: 0.32s; }
+    .hero-dept { animation-delay: 0.4s; }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 100px;
+      margin-bottom: 28px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .coat-of-arms {
+      width: 28px;
+      height: 28px;
+      background: url('assets/bibi.png') no-repeat center;
+      background-size: contain;
+      opacity: 0.9;
+    }
+
+    .hero h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: clamp(1.85rem, 5vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .hero-title {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      max-width: 520px;
+      margin: 0 auto 6px;
+      line-height: 1.5;
+    }
+
+    .hero-unit {
+      font-size: 0.9rem;
+      color: rgba(251, 191, 36, 0.9);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .hero-dept {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .main {
+      flex: 1;
+      padding: 0 20px 24px;
+      margin-top: -48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .contact-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      animation: softReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+    }
+
+    .contact-card h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .contact-list li {
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+      animation: softReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .contact-list li:nth-child(1) { animation-delay: 0.3s; }
+    .contact-list li:nth-child(2) { animation-delay: 0.38s; }
+    .contact-list li:nth-child(3) { animation-delay: 0.46s; }
+    .contact-list li:nth-child(4) { animation-delay: 0.54s; }
+    .contact-list li:nth-child(5) { animation-delay: 0.62s; }
+
+    .contact-list li:hover {
+      background: var(--bg);
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .contact-link-static {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 12px;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .contact-link:hover .contact-icon,
+    .contact-link-static:hover .contact-icon {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--power);
+    }
+
+    .contact-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contact-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .contact-value {
+      font-size: 0.95rem;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .address-lines {
+      display: block;
+      margin-top: 2px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .cta-container {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      width: 100%;
+      max-width: 320px;
+      animation: softReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+    }
+
+    .btn-primary:hover {
+      background: var(--navy-soft);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px 20px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 35, 64, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      animation: fadeUp 0.3s ease-out;
+    }
+
+    .modal-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--energy);
+      font-size: 20px;
+    }
+
+    .modal h3 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.35rem;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-modal {
+      padding: 13px 20px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+    }
+
+    .btn-modal-primary {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-modal-primary:hover {
+      background: var(--navy-soft);
+    }
+
+    .btn-modal-accent {
+      background: var(--energy);
+      color: white;
+    }
+
+    .btn-modal-accent:hover {
+      background: #d97706;
+    }
+
+    .btn-modal-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-modal-ghost:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a7f4b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 1001;
+      animation: fadeUp 0.3s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes softReveal {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes ambientGlow {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .password-modal {
+        padding: 36px 24px;
+      }
+
+      .hero {
+        padding: 36px 20px 72px;
+      }
+
+      .contact-card {
+        padding: 24px 20px;
+      }
+
+      .contact-link,
+      .contact-link-static {
+        padding: 12px 8px;
+        gap: 12px;
+      }
+
+      .contact-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="password-overlay" class="password-overlay">
+    <div class="password-modal">
+      <div class="password-icon">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <h2 class="password-title">Private Access</h2>
+      <p class="password-subtitle">Enter the access code to view this profile.</p>
+      <form id="password-form">
+        <input
+          type="password"
+          id="password-input"
+          class="password-input"
+          placeholder="••••"
+          maxlength="4"
+          autocomplete="off"
+          autofocus
+        >
+        <button type="submit" class="password-submit">Continue</button>
+        <div id="password-error" class="password-error">
+          Incorrect code. Please try again.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="main-content" class="main-content">
+    <div class="page">
+      <header class="hero">
+        <div class="hero-bg" aria-hidden="true">
+          <div class="hero-glow hero-glow-1"></div>
+          <div class="hero-glow hero-glow-2"></div>
+          <div class="hero-line"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <div class="coat-of-arms"></div>
+            <span>The United Republic of Tanzania</span>
+          </div>
+          <h1>Eng. Decklan P. Mhaiki</h1>
+          <p class="hero-title">Project Coordinator</p>
+          <p class="hero-unit">Compact Delivery &amp; Monitoring Unit (CDMU)</p>
+          <p class="hero-dept">Ministry of Energy</p>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="container">
+          <section class="contact-card">
+            <h2>Contact</h2>
+            <ul class="contact-list">
+              <li>
+                <a href="mailto:d.mhaiki@gmail.com" class="contact-link">
+                  <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                  <div class="contact-body">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">d.mhaiki@gmail.com</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+255784493344" class="contact-link">
+                  <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                  <div class="contact-body">
+                    <div class="contact-label">Mobile</div>
+                    <div class="contact-value">+255 784 493 344</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+255736493344" class="contact-link">
+                  <div class="contact-icon"><i class="fas fa-mobile-screen"></i></div>
+                  <div class="contact-body">
+                    <div class="contact-label">Mobile</div>
+                    <div class="contact-value">+255 736 493 344</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.nishati.go.tz" target="_blank" rel="noopener noreferrer" class="contact-link">
+                  <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                  <div class="contact-body">
+                    <div class="contact-label">Website</div>
+                    <div class="contact-value">www.nishati.go.tz</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div class="contact-link-static">
+                  <div class="contact-icon"><i class="fas fa-location-dot"></i></div>
+                  <div class="contact-body">
+                    <div class="contact-label">Office Address</div>
+                    <div class="contact-value">
+                      Government City, Mtumba
+                      <span class="address-lines">P.O. Box 2494, Dodoma, Tanzania</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div class="cta-container">
+              <button id="download" class="btn-primary" type="button">
+                <i class="fas fa-address-card"></i>
+                Save Contact
+              </button>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p>&copy; <span id="copyright-year"></span> Ministry of Energy, Tanzania</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const CORRECT_PASSWORD = '0101';
+    let isAuthenticated = false;
+
+    function checkAuthentication() {
+      if (sessionStorage.getItem('profileAuthenticated') === 'true') {
+        showMainContent();
+        return true;
+      }
+      return false;
+    }
+
+    function showMainContent() {
+      const passwordOverlay = document.getElementById('password-overlay');
+      const mainContent = document.getElementById('main-content');
+
+      passwordOverlay.style.animation = 'fadeOut 0.3s ease forwards';
+
+      setTimeout(() => {
+        passwordOverlay.style.display = 'none';
+        mainContent.classList.add('show');
+        isAuthenticated = true;
+      }, 300);
+    }
+
+    function showPasswordError() {
+      const errorEl = document.getElementById('password-error');
+      const inputEl = document.getElementById('password-input');
+
+      errorEl.classList.add('show');
+      inputEl.style.borderColor = '#c53030';
+      inputEl.value = '';
+      inputEl.focus();
+
+      setTimeout(() => {
+        errorEl.classList.remove('show');
+        inputEl.style.borderColor = '';
+      }, 3000);
+    }
+
+    function handlePasswordSubmit(e) {
+      e.preventDefault();
+      const inputPassword = document.getElementById('password-input').value;
+
+      if (inputPassword === CORRECT_PASSWORD) {
+        sessionStorage.setItem('profileAuthenticated', 'true');
+        showMainContent();
+      } else {
+        showPasswordError();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const yearEl = document.getElementById('copyright-year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      if (checkAuthentication()) return;
+
+      const passwordForm = document.getElementById('password-form');
+      if (passwordForm) {
+        passwordForm.addEventListener('submit', handlePasswordSubmit);
+      }
+
+      const passwordInput = document.getElementById('password-input');
+      if (passwordInput) {
+        passwordInput.addEventListener('input', function(e) {
+          const value = e.target.value;
+          if (value.length === 4) {
+            setTimeout(() => {
+              if (value === CORRECT_PASSWORD) {
+                sessionStorage.setItem('profileAuthenticated', 'true');
+                showMainContent();
+              } else {
+                showPasswordError();
+              }
+            }, 300);
+          }
+        });
+
+        passwordInput.addEventListener('keypress', function(e) {
+          if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Enter') {
+            e.preventDefault();
+          }
+        });
+      }
+    });
+
+    const contactInfo = {
+      firstName: 'Decklan P.',
+      lastName: 'Mhaiki',
+      prefix: 'Eng.',
+      title: 'Project Coordinator, Compact Delivery & Monitoring Unit (CDMU)',
+      organization: 'Ministry of Energy',
+      email: 'd.mhaiki@gmail.com',
+      phone: '+255784493344',
+      phone2: '+255736493344',
+      website: 'https://www.nishati.go.tz',
+      address: {
+        street: 'Government City, Mtumba',
+        poBox: 'P.O. Box 2494',
+        city: 'Dodoma',
+        country: 'Tanzania'
+      }
+    };
+
+    function generateVCard(contact) {
+      return [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        `FN:${contact.prefix} ${contact.firstName} ${contact.lastName}`,
+        `N:${contact.lastName};${contact.firstName};;${contact.prefix};`,
+        `TITLE:${contact.title}`,
+        `ORG:${contact.organization}`,
+        `EMAIL;TYPE=INTERNET:${contact.email}`,
+        `TEL;TYPE=CELL:${contact.phone}`,
+        `TEL;TYPE=CELL:${contact.phone2}`,
+        `URL:${contact.website}`,
+        `ADR;TYPE=WORK:;;${contact.address.street};${contact.address.city};;;${contact.address.country}`,
+        `X-ADDRESS-LINE1:${contact.address.street}`,
+        `X-ADDRESS-LINE2:${contact.address.poBox}`,
+        `NOTE:${contact.title} at ${contact.organization}, United Republic of Tanzania`,
+        'END:VCARD'
+      ].join('\n');
+    }
+
+    function showDownloadModal() {
+      const modalOverlay = document.createElement('div');
+      modalOverlay.id = 'contact-modal';
+      modalOverlay.className = 'modal-overlay';
+
+      modalOverlay.innerHTML = `
+        <div class="modal" role="dialog" aria-labelledby="modal-title">
+          <div class="modal-icon"><i class="fas fa-address-book"></i></div>
+          <h3 id="modal-title">Save Contact</h3>
+          <p>Choose how you'd like to save Eng. Decklan P. Mhaiki's contact information.</p>
+          <div class="modal-actions">
+            <button type="button" id="download-vcard" class="btn-modal btn-modal-primary">
+              <i class="fas fa-download"></i>
+              Download Contact (.vcf)
+            </button>
+            <button type="button" id="view-business-card" class="btn-modal btn-modal-accent">
+              <i class="fas fa-id-card"></i>
+              View Business Card
+            </button>
+            <button type="button" id="close-modal" class="btn-modal btn-modal-ghost">Cancel</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modalOverlay);
+
+      modalOverlay.querySelector('#download-vcard').addEventListener('click', downloadVCard);
+      modalOverlay.querySelector('#view-business-card').addEventListener('click', () => {
+        closeModal();
+        window.location.href = 'back-card.html';
+      });
+      modalOverlay.querySelector('#close-modal').addEventListener('click', closeModal);
+
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      document.addEventListener('keydown', function escapeHandler(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+          document.removeEventListener('keydown', escapeHandler);
+        }
+      });
+    }
+
+    function downloadVCard() {
+      const vCardData = generateVCard(contactInfo);
+      const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Decklan_Mhaiki_Contact.vcf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      showSuccessMessage();
+      closeModal();
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('contact-modal');
+      if (modal) {
+        modal.style.animation = 'fadeOut 0.2s ease forwards';
+        setTimeout(() => modal.remove(), 200);
+      }
+    }
+
+    function showSuccessMessage() {
+      const successMsg = document.createElement('div');
+      successMsg.className = 'toast';
+      successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Contact saved successfully';
+      document.body.appendChild(successMsg);
+
+      setTimeout(() => {
+        successMsg.style.animation = 'fadeOut 0.3s ease forwards';
+        setTimeout(() => successMsg.remove(), 300);
+      }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const downloadBtn = document.getElementById('download');
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (isAuthenticated || sessionStorage.getItem('profileAuthenticated') === 'true') {
+            showDownloadModal();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
